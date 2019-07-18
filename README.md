@@ -19,3 +19,8 @@ Install and configure a database server and deploy one web application on it.
   - Identify the instance: Udcty_server (or any other name you want)
   - Click `Create instance`
 - You will be given a public IP number (for ex.: `3.222.110.15`) and a user name: `ubuntu`
+
+### Access the server
+- Click over the name of the instance you have just created
+- Connect to the server clicking `Connect using SSH`
+- A new window will pop up with the access to the server
