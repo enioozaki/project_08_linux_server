@@ -29,7 +29,7 @@ Install and configure a database server and deploy one web application on it.
 - A new window will pop up with the access to the server
 
 ### Update installed packages
-- In the SSH opened window, update the software source list
+- On the SSH opened window, update the software source list
 
 `sudo apt-get update`
 - Now update the software 
@@ -42,11 +42,69 @@ Install and configure a database server and deploy one web application on it.
 
 `sudo apt-get install finger`
 
+### Create a new user
+- In the SSH opened window, create a new user called grader. You will have to define a passsword and full name
+
+`sudo adduser grader`
+
+### Give the new user sudo permission
+- Check that the file etc/sudoers have the line #includedir /etc/sudoers.d
+- It means that you need to include the permission file in this directory
+- As you want to give sudo access to grader user, so create a file grader in /etc/sudoers.d
+
+`sudo touch /etc/sudoers.d/grader`
+- Edit the file with nano and paste the following `grader ALL=(ALL:ALL) ALL`
+
+`sudo nano /etc/sudoers.d/grader`
+- In nano type `grader ALL=(ALL:ALL) ALL` and save it.
+
+
+### Create SSH pair for new user
+- Open a terminal in your computer
+- In the terminal create a SSH key pair. 
+
+`ssh-keygen`
+- Define a name for the key file e.g. `udcty_key` and a passphrase
+- Use the same suggested directory to create the key files `/c/Users/<YOU>/.ssh/`
+- Two files will be created: the private key `/c/Users/<YOU>/.ssh/udcty_key` and the public key `/c/Users/<YOU>/.ssh/udcty_key.pub`
+
+### Place the public key on the remote server
+- On the server terminal change the user to grader
+
+`su - grader`
+- Create `.ssh` directory
+
+`mkdir .ssh`
+- Create file `authorized_keys`
+
+`touch .ssh/authorized_keys`
+
+- Open the file with nano and copy the contents the public key file `/c/Users/<YOU>/.ssh/udcty_key.pub` created in the previous item
+
+`nano .ssh/authorized_keys`
+
+- Change privileges accesses as follows:
+
+```
+chmod 700 .ssh
+chmod 644 .ssh/authorized_keys
+```
+
+- On the terminal in your computer, access the server
+
+`ssh grader@3.222.110.15 -p 22 -i ~/.ssh/udcty_key`
+
 ### Change SSH port
 - Change the SSH port from 22 to 2200
 `sudo nano /etc/ssh/sshd_config`
 - Reload SSH service
-`sudo service ssh restart`
+```
+sudo service ssh restart
+sudo service sshd restart
+```
+
+### Configure the Firewall
+- Configure the firewall to allow ssh using port 2200, HTTP through port 80 and NTP through port 123
 
 ```
 sudo ufw default deny incoming
@@ -57,30 +115,5 @@ sudo ufw allow www
 sudo ufw allow ntp
 sudo ufw enable
 ````
-### Create a new user
-- Create a new user called grader. You will have to define a passsword and full name
-
-`sudo adduser grader`
-- 
-
-### Give the new user sudo permission
-- Copy the ubuntu  in /etc/sudoers.d to grader
-
-`sudo cp /etc/sudoers.d/ubuntu /etc/sudoers.d/grader`
-- Edit the file grader with nano
-`sudo nano /etc/sudoers.d/grader`
-- In nano substitute the word ubbuntu for grader and save it
-
-
-
-
-### Create SSH pair for new user
-- Open a terminal in your computer
-- In the termnal create a SSH key pair. Define a name for the key file and a passphrase
-
-`ssh-keygen`
-- 
-
-
 
 
