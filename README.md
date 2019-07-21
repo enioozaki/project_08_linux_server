@@ -184,6 +184,39 @@ CREATE USER grader;
 
 `exit`
 
+### Install git
+- Install Git 
+
+`sudo apt-get install git`
+- Change directory to /var/www
+
+`cd /var/www`
+- Create the application directory
+
+`sudo mkdir tennis_ranking`
+- Change directory to tennis_ranking
+
+`cd tennis_ranking`
+- Clone the tennis_ranking App repo:
+
+`sudo git clone https://github.com/enioozaki/prj04_tennis_ranking.git`
+- Change the inner directory name to FlaskApp and change directory
+
+```
+sudo mv ./prj04_tennis_ranking ./FlaskApp
+cd FlaskApp
+```
+
+
+
+
+
+Rename website.py to __init__.py using sudo mv website.py __init__.py
+Edit database_setup.py, website.py and functions_helper.py and change engine = create_engine('sqlite:///toyshop.db') to engine = create_engine('postgresql://catalog:password@localhost/catalog')
+Install pip sudo apt-get install python-pip
+Use pip to install dependencies sudo pip install -r requirements.txt
+Install psycopg2 sudo apt-get -qqy install postgresql python-psycopg2
+Create database schema sudo python database_setup.py
 
 
 Check if no remote connections are allowed sudo vim /etc/postgresql/9.3/main/pg_hba.conf
