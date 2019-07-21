@@ -173,7 +173,7 @@ CREATE USER grader;
 ```
 - Set a password for user **grader**
 
-`ALTER ROLE grader WITH PASSWORD 'password';`
+`ALTER ROLE grader WITH PASSWORD 'postgres_password';`
 - Give user **grader** permission to the database **clubs**
 
 `GRANT ALL PRIVILEGES ON DATABASE clubs TO grader;`
@@ -184,7 +184,7 @@ CREATE USER grader;
 
 `exit`
 
-### Install git
+### Install git and clone repo
 - Install Git 
 
 `sudo apt-get install git`
@@ -207,9 +207,44 @@ sudo mv ./prj04_tennis_ranking ./FlaskApp
 cd FlaskApp
 ```
 
+### Configure the Application
+
+- Rename the application to __init__
+
+`sudo mv application.py __init__.py`
+- Edit __init__.py and database_setup.py and change **engine = create_engine('sqlite:///clubs.db?check_same_thread=False')** or **engine = create_engine('sqlite:///clubs.db?check_same_thread=False')** to 
+`create_engine('postgresql://grader:postgres_password@localhost/clubs')`, using:
+
+```
+sudo nano __init__.py
+sudo nano database_setup.py
+```
 
 
 
+
+Install pip
+sudo apt-get install python-pip
+sudo touch requirements.txt
+sudo nano requirements.txt
+#and paste the requirements on the box below
+Paste those dependencies at requirements.txt:
+requests>=2.12
+psycopg2
+sqlalchemy
+flask
+Flask-Session
+httplib2
+oauth2client
+flask_httpauth
+sudo -H pip install -r requirements.txt
+Install psycopg2
+pip install psycopg2==2.7.3.2
+Create database schema
+sudo python db_config.py
+Configure and Enable a New Virtual Host
+Create FlaskApp.conf to edit:
+sudo nano /etc/apache2/sites-available/FlaskApp.conf
 
 Rename website.py to __init__.py using sudo mv website.py __init__.py
 Edit database_setup.py, website.py and functions_helper.py and change engine = create_engine('sqlite:///toyshop.db') to engine = create_engine('postgresql://catalog:password@localhost/catalog')
