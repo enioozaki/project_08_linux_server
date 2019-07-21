@@ -90,10 +90,6 @@ chmod 700 .ssh
 chmod 644 .ssh/authorized_keys
 ```
 
-- On the terminal in your computer, access the server
-
-`ssh grader@3.222.110.15 -p 22 -i ~/.ssh/udcty_key`
-
 ### Change SSH port
 - Change the SSH port from 22 to 2200
 `sudo nano /etc/ssh/sshd_config`
@@ -116,4 +112,92 @@ sudo ufw allow ntp
 sudo ufw enable
 ````
 
+### Access the server from your terminal
+- On the terminal in your computer, access the server
+
+`ssh grader@3.222.110.15 -p 2200 -i ~/.ssh/udcty_key`
+- As you changed the ssh port to 2200, you will no longer have access through `Connect using SSH` from AWS dashboard
+
+### Alternatively install PuTTY to access server
+- [Download PuTTY](https://www.putty.org/) and install it.
+- Run PuTTYgen to generate a `.ppk` file
+- Click Load button and locate the `udcty_key`
+- Insert passphrase if you created so.
+- Choose Save private key and a `udcty_key.ppk` will be created
+
+- Run PuTTY
+- Insert the IP address ``3.222.110.15`` in Host Name and 2200 in Port
+- Under Category, select Connection -> Data. Insert `grader` in Auto-login username
+- Under Category, expand SSH and choose Auth
+- Click Browse and select `udcty_key.ppk` in the directory you saved it.
+- Select Session and save it as `AWS_grader` or any other name you like
+- Click Open to access the server
+
+### Configure the local timezone to UTC
+- On the terminal you are accessing the server, type
+`sudo timedatectl set-timezone UTC` 
+
+### Install and configure Apache
+- Install Apache
+
+`sudo apt-get install apache2`
+- Install mod_wsgi
+
+`sudo apt-get install libapache2-mod-wsgi`
+- Restart Apache with 
+
+`sudo apache2ctl restart`
+
+### Install Python3
+- Install the Python 3 mod_wsgi package on your server
+
+`sudo apt-get install libapache2-mod-wsgi-py3`
+
+### Install PostgreSQL
+- Install PostgreSQL
+`sudo apt-get install postgresql`
+
+
+### Create and config database
+- Change user to postgres
+
+`sudo su - postgres`
+- Get into postgres shell
+
+`psql`
+- Create a new database named **clubs** and create a new user named **grader** in postgreSQL shell
+
+```
+CREATE DATABASE clubs;
+CREATE USER grader;
+```
+- Set a password for user **grader**
+
+`ALTER ROLE grader WITH PASSWORD 'password';`
+- Give user **grader** permission to the database **clubs**
+
+`GRANT ALL PRIVILEGES ON DATABASE clubs TO grader;`
+- Quit PostgreSQL
+
+`\q`
+- Logout from user postgres
+
+`exit`
+
+
+
+Check if no remote connections are allowed sudo vim /etc/postgresql/9.3/main/pg_hba.conf
+
+
+
+
+
+--------------------
+Do not allow remote connections
+Create a new database user named catalog that has limited permissions to your catalog application database.
+12. Install git.
+
+Deploy the Item Catalog project.
+13. Clone and setup your Item Catalog project from the Github repository you created earlier in this Nanodegree program.
+14. Set it up in your server so that it functions correctly when visiting your server’s IP address in a browser. Make sure that your .git directory is not publicly accessible via a browser!
 
