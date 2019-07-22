@@ -5,12 +5,6 @@ PROJECT_08_LINUX_SERVER
 Install a Linux server, preparing it to host a web application and securing it from attacks.
 Install and configure a database server and deploy one web application on it.
 
-## Tasks to be accomplished
-- [Create an instance in AWS](#create-an-instance-in-aws)
-- [Access the server](#access-the-server)
-- [Update installed packages](#update-installed-packages)
--
-
 
 ### Create an instance in AWS
 - Login to [AWS](https://aws.amazon.com/pt/console/) . If you don't have an AWS account, create one.
@@ -90,8 +84,11 @@ chmod 700 .ssh
 chmod 644 .ssh/authorized_keys
 ```
 
-### Change SSH port
-- Change the SSH port from 22 to 2200
+### Change SSH port and disable root login
+- Change the SSH Port from `Port 22` to `Port 2200`
+- Change `PermitRootLogin prohibit-password` to `PermitRootLogin no`
+- If `PasswordAuthentication yes`change it to `PasswordAuthentication no`
+
 `sudo nano /etc/ssh/sshd_config`
 - Reload SSH service
 ```
@@ -148,11 +145,6 @@ sudo ufw enable
 
 `sudo apache2ctl restart`
 
-### Install Python3
-- Install the Python 3 mod_wsgi package on your server
-
-`sudo apt-get install libapache2-mod-wsgi-py3`
-
 ### Install PostgreSQL
 - Install PostgreSQL
 `sudo apt-get install postgresql`
@@ -186,7 +178,7 @@ ALTER ROLE grader WITH PASSWORD 'grader';
 
 `exit`
 
-### Install git and clone repo
+### Install git and remote repo
 - Install Git 
 
 `sudo apt-get install git`
@@ -206,16 +198,6 @@ sudo git init
 sudo git remote add origin  https://github.com/enioozaki/prj04_tennis_ranking.git
 sudo git pull origin master
 
-------------
-```
-- Change the inner directory name to FlaskApp and change directory
-
-```
-sudo mv ./prj04_tennis_ranking ./FlaskApp
-cd FlaskApp
-```
--------------
-
 ### Configure the Application
 
 - Rename the application to __init__
@@ -223,12 +205,21 @@ cd FlaskApp
 `sudo mv application.py __init__.py`
 - Edit __init__.py and database_setup.py and change **engine = create_engine('sqlite:///clubs.db?check_same_thread=False')** or **engine = create_engine('sqlite:///clubs.db?check_same_thread=False')** to 
 `engine = create_engine('postgresql://grader:postgres_password@localhost/clubs')`, using:
-engine = create_engine('postgresql://grader:grader@localhost/clubs')
 
 ```
 sudo nano __init__.py
 sudo nano database_setup.py
 ```
+
+- Include absolute directory path `/var/www/tennis_ranking/` around line 20 of __init__.py
+
+`sudo nano __init__.py`
+Change from 
+`CLIENT_ID = json.loads(
+    open('client_secrets.json', 'r')`
+to 
+`CLIENT_ID = json.loads(
+    open('/var/www/tennis_ranking/client_secrets.json', 'r')`
 
 ### Install pip and dependencies
 - Install pip
@@ -243,31 +234,17 @@ sudo nano requirements.txt
 ```
 - Paste lines below
 ```
-requests>=2.12
-
-Flask-Session
-flask_httpauth
-
 flask
 sqlalchemy
 oauth2client
 httplib2
 requests>=2.12
 psycopg2==2.7.3.2
-
-json
-random
-string
 ```
 
 - Install dependencies listed in requirements.txt
 
 `sudo -H pip install -r requirements.txt`
-
-------
-? Install psycopg2
-? pip install psycopg2==2.7.3.2
----------
 
 ### Initialize Database
 - Create database schema
@@ -347,21 +324,37 @@ application.secret_key = 'super_secret_key'
 ### Log
 - If any error comes up, you can get more information about this error in the server error log:
 
-`sudo tail -f /var/log/apache2/error.log`
+`sudo cat -f /var/log/apache2/error.log`
 
+### References
+https://askubuntu.com/questions/27559/how-do-i-disable-remote-ssh-login-as-root-from-a-server
+https://stackoverflow.com/questions/36020374/google-permission-denied-to-generate-login-hint-for-target-domain-not-on-localh
+
+
+### Thanks
+Git Repos from 
+@andrevst
+@kongling893
+@mguidoti
+@leandrocl2005
+@lucianobarauna
+
+-------------
+to be included in instructions to reviewers
+
+engine = create_engine('postgresql://grader:grader@localhost/clubs')
+
+private_key
+
+
+--------------
 
 Check if no remote connections are allowed sudo vim /etc/postgresql/9.3/main/pg_hba.conf
-
-
-
 
 
 --------------------
 Do not allow remote connections
 Create a new database user named catalog that has limited permissions to your catalog application database.
-12. Install git.
 
-Deploy the Item Catalog project.
-13. Clone and setup your Item Catalog project from the Github repository you created earlier in this Nanodegree program.
 14. Set it up in your server so that it functions correctly when visiting your server’s IP address in a browser. Make sure that your .git directory is not publicly accessible via a browser!
 
