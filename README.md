@@ -174,6 +174,8 @@ CREATE USER grader;
 - Set a password for user **grader**
 
 `ALTER ROLE grader WITH PASSWORD 'postgres_password';`
+ALTER ROLE grader WITH PASSWORD 'grader';
+
 - Give user **grader** permission to the database **clubs**
 
 `GRANT ALL PRIVILEGES ON DATABASE clubs TO grader;`
@@ -197,15 +199,22 @@ CREATE USER grader;
 - Change directory to tennis_ranking
 
 `cd tennis_ranking`
-- Clone the tennis_ranking App repo:
+- Add the tennis_ranking App repo as remote:
 
-`sudo git clone https://github.com/enioozaki/prj04_tennis_ranking.git`
+```
+sudo git init
+sudo git remote add origin  https://github.com/enioozaki/prj04_tennis_ranking.git
+sudo git pull origin master
+
+------------
+```
 - Change the inner directory name to FlaskApp and change directory
 
 ```
 sudo mv ./prj04_tennis_ranking ./FlaskApp
 cd FlaskApp
 ```
+-------------
 
 ### Configure the Application
 
@@ -270,23 +279,23 @@ string
 
 - Create FlaskApp.conf and edit:
 ```
-sudo touch /etc/apache2/sites-available/FlaskApp.conf
-sudo nano /etc/apache2/sites-available/FlaskApp.conf
+sudo touch /etc/apache2/sites-available/tennis_ranking.conf
+sudo nano /etc/apache2/sites-available/tennis_ranking.conf
 ```
 
-- Add the lines of code below to the file `FlaskApp.conf`to configure the virtual host.
+- Add the lines of code below to the file `tennis_ranking.conf`to configure the virtual host.
 ```
 <VirtualHost *:80>
 	ServerName 3.222.113.14
 	ServerAdmin enioozaki@uol.com.br
 	ServerAlias 3.222.113.14.xip.io
 	WSGIScriptAlias / /var/www/tennis_ranking/flaskapp.wsgi
-	<Directory /var/www/tennis_ranking/FlaskApp/>
+	<Directory /var/www/tennis_ranking/>
 		Order allow,deny
 		Allow from all
 	</Directory>
-	Alias /static /var/www/tennis_ranking/FlaskApp/static
-	<Directory /var/www/tennis_ranking/FlaskApp/static/>
+	Alias /static /var/www/tennis_ranking/static
+	<Directory /var/www/tennis_ranking/static/>
 		Order allow,deny
 		Allow from all
 	</Directory>
@@ -295,10 +304,11 @@ sudo nano /etc/apache2/sites-available/FlaskApp.conf
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 ```
--------
-- Enable the virtual host with the following command:
-`sudo a2ensite FlaskApp`
--------
+
+### Enable the virtual host
+- Enable the virtual host
+`sudo a2ensite tennis_ranking`
+
 
 ### Create the .wsgi File
 - Create the .wsgi File in directory `/var/www/tennis_ranking`
@@ -316,12 +326,28 @@ sudo nano flaskapp.wsgi
 import sys
 import logging
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0,"/var/www/tennis_ranking/")
+sys.path.insert(0,"/var/www/tennis_ranking")
 
 from __init__ import app as application
 application.secret_key = 'super_secret_key'
 ```
+### Restart Apache
+- Restart Apache
 
+`sudo service apache2 restart`
+
+- Reload Apache
+`sudo service apache2 reload`
+
+### Execute
+- Access the app 
+
+`3.222.113.14.xip.io`
+
+### Log
+- If any error comes up, you can get more information about this error in the server error log:
+
+`sudo tail -f /var/log/apache2/error.log`
 
 
 Check if no remote connections are allowed sudo vim /etc/postgresql/9.3/main/pg_hba.conf
