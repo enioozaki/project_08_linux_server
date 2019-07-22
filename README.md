@@ -213,45 +213,115 @@ cd FlaskApp
 
 `sudo mv application.py __init__.py`
 - Edit __init__.py and database_setup.py and change **engine = create_engine('sqlite:///clubs.db?check_same_thread=False')** or **engine = create_engine('sqlite:///clubs.db?check_same_thread=False')** to 
-`create_engine('postgresql://grader:postgres_password@localhost/clubs')`, using:
+`engine = create_engine('postgresql://grader:postgres_password@localhost/clubs')`, using:
+engine = create_engine('postgresql://grader:grader@localhost/clubs')
 
 ```
 sudo nano __init__.py
 sudo nano database_setup.py
 ```
 
+### Install pip and dependencies
+- Install pip
 
+`sudo apt-get install python-pip`
 
+- Create and include dependencies in requirements.txt
 
-Install pip
-sudo apt-get install python-pip
+```
 sudo touch requirements.txt
 sudo nano requirements.txt
-#and paste the requirements on the box below
-Paste those dependencies at requirements.txt:
+```
+- Paste lines below
+```
 requests>=2.12
-psycopg2
-sqlalchemy
-flask
-Flask-Session
-httplib2
-oauth2client
-flask_httpauth
-sudo -H pip install -r requirements.txt
-Install psycopg2
-pip install psycopg2==2.7.3.2
-Create database schema
-sudo python db_config.py
-Configure and Enable a New Virtual Host
-Create FlaskApp.conf to edit:
-sudo nano /etc/apache2/sites-available/FlaskApp.conf
 
-Rename website.py to __init__.py using sudo mv website.py __init__.py
-Edit database_setup.py, website.py and functions_helper.py and change engine = create_engine('sqlite:///toyshop.db') to engine = create_engine('postgresql://catalog:password@localhost/catalog')
-Install pip sudo apt-get install python-pip
-Use pip to install dependencies sudo pip install -r requirements.txt
-Install psycopg2 sudo apt-get -qqy install postgresql python-psycopg2
-Create database schema sudo python database_setup.py
+Flask-Session
+flask_httpauth
+
+flask
+sqlalchemy
+oauth2client
+httplib2
+requests>=2.12
+psycopg2==2.7.3.2
+
+json
+random
+string
+```
+
+- Install dependencies listed in requirements.txt
+
+`sudo -H pip install -r requirements.txt`
+
+------
+? Install psycopg2
+? pip install psycopg2==2.7.3.2
+---------
+
+### Initialize Database
+- Create database schema
+
+`sudo python database_setup.py`
+
+
+### Configure and Enable a New Virtual Host
+
+- Create FlaskApp.conf and edit:
+```
+sudo touch /etc/apache2/sites-available/FlaskApp.conf
+sudo nano /etc/apache2/sites-available/FlaskApp.conf
+```
+
+- Add the lines of code below to the file `FlaskApp.conf`to configure the virtual host.
+```
+<VirtualHost *:80>
+	ServerName 3.222.113.14
+	ServerAdmin enioozaki@uol.com.br
+	ServerAlias 3.222.113.14.xip.io
+	WSGIScriptAlias / /var/www/tennis_ranking/flaskapp.wsgi
+	<Directory /var/www/tennis_ranking/FlaskApp/>
+		Order allow,deny
+		Allow from all
+	</Directory>
+	Alias /static /var/www/tennis_ranking/FlaskApp/static
+	<Directory /var/www/tennis_ranking/FlaskApp/static/>
+		Order allow,deny
+		Allow from all
+	</Directory>
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	LogLevel warn
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+-------
+- Enable the virtual host with the following command:
+`sudo a2ensite FlaskApp`
+-------
+
+### Create the .wsgi File
+- Create the .wsgi File in directory `/var/www/tennis_ranking`
+
+```
+cd /var/www/tennis_ranking
+sudo touch flaskapp.wsgi 
+sudo nano flaskapp.wsgi 
+```
+
+- Add the lines of code below to the file `flaskapp.wsgi`
+
+```
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/tennis_ranking/")
+
+from __init__ import app as application
+application.secret_key = 'super_secret_key'
+```
+
 
 
 Check if no remote connections are allowed sudo vim /etc/postgresql/9.3/main/pg_hba.conf
