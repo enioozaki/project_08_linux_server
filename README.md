@@ -289,7 +289,7 @@ sudo nano /etc/apache2/sites-available/tennis_ranking.conf
 	ServerName 3.222.113.14
 	ServerAdmin enioozaki@uol.com.br
 	ServerAlias 3.222.113.14.xip.io
-	WSGIScriptAlias / /var/www/tennis_ranking/flaskapp.wsgi
+	WSGIScriptAlias / /var/www/tennis_ranking/tennis_ranking.wsgi
 	<Directory /var/www/tennis_ranking/>
 		Order allow,deny
 		Allow from all
@@ -315,11 +315,11 @@ sudo nano /etc/apache2/sites-available/tennis_ranking.conf
 
 ```
 cd /var/www/tennis_ranking
-sudo touch flaskapp.wsgi 
-sudo nano flaskapp.wsgi 
+sudo touch tennis_ranking.wsgi 
+sudo nano tennis_ranking.wsgi 
 ```
 
-- Add the lines of code below to the file `flaskapp.wsgi`
+- Add the lines of code below to the file `tennis_ranking.wsgi`
 
 ```
 #!/usr/bin/python
