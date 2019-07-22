@@ -197,6 +197,7 @@ ALTER ROLE grader WITH PASSWORD 'grader';
 sudo git init
 sudo git remote add origin  https://github.com/enioozaki/prj04_tennis_ranking.git
 sudo git pull origin master
+```
 
 ### Configure the Application
 
