@@ -339,6 +339,7 @@ application.secret_key = 'super_secret_key'
 https://askubuntu.com/questions/27559/how-do-i-disable-remote-ssh-login-as-root-from-a-server
 https://stackoverflow.com/questions/36020374/google-permission-denied-to-generate-login-hint-for-target-domain-not-on-localh
 https://askubuntu.com/questions/138423/how-do-i-change-my-timezone-to-utc-gmt
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-14-04
 
 
 ### Thanks
