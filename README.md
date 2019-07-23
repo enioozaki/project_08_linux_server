@@ -173,8 +173,7 @@ CREATE USER grader;
 ```
 - Set a password for user **grader**
 
-`ALTER ROLE grader WITH PASSWORD 'postgres_password';`
-ALTER ROLE grader WITH PASSWORD 'grader';
+`ALTER ROLE grader WITH PASSWORD 'grader';`
 
 - Give user **grader** permission to the database **clubs**
 
