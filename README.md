@@ -15,7 +15,7 @@ Install and configure a database server and deploy one web application on it.
   - Choose an instance plan: $3.50 (the first month is free)
   - Identify the instance: Udcty_server (or any other name you want)
   - Click `Create instance`
-- You will be given a public IP number (for ex.: `3.222.110.15`) and a user name: `ubuntu`
+- You will be given a public IP number (for ex.: `3.221.170.134`) and a user name: `ubuntu`
 
 ### Access the server
 - Click over the name of the instance you have just created
@@ -112,8 +112,16 @@ sudo ufw enable
 ### Access the server from your terminal
 - On the terminal in your computer, access the server
 
-`ssh grader@3.222.110.15 -p 2200 -i ~/.ssh/udcty_key`
+`ssh grader@3.221.170.134 -p 2200 -i ~/.ssh/udcty_key`
+
 - As you changed the ssh port to 2200, you will no longer have access through `Connect using SSH` from AWS dashboard
+
+### Allow Access through port 2200 in AWS Dashboard
+- As default AWS firewall only allows access through ports 22(ssh) and 80(http)
+- You will have to add another connection
+- Go to the server dashboard and select `Manage` and `Networking`. 
+- Add another connection in the firewall
+- Select `Customer` `TCP` `2200` and `save`
 
 ### Alternatively install PuTTY to access server
 - [Download PuTTY](https://www.putty.org/) and install it.
@@ -123,7 +131,7 @@ sudo ufw enable
 - Choose Save private key and a `udcty_key.ppk` will be created
 
 - Run PuTTY
-- Insert the IP address ``3.222.110.15`` in Host Name and 2200 in Port
+- Insert the IP address ``3.221.170.134`` in Host Name and 2200 in Port
 - Under Category, select Connection -> Data. Insert `grader` in Auto-login username
 - Under Category, expand SSH and choose Auth
 - Click Browse and select `udcty_key.ppk` in the directory you saved it.
@@ -330,6 +338,7 @@ application.secret_key = 'super_secret_key'
 ### References
 https://askubuntu.com/questions/27559/how-do-i-disable-remote-ssh-login-as-root-from-a-server
 https://stackoverflow.com/questions/36020374/google-permission-denied-to-generate-login-hint-for-target-domain-not-on-localh
+https://askubuntu.com/questions/138423/how-do-i-change-my-timezone-to-utc-gmt
 
 
 ### Thanks
