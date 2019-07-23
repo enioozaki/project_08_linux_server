@@ -202,7 +202,7 @@ CREATE USER grader;
 
 ```
 sudo git init
-sudo git remote add origin  https://github.com/enioozaki/prj04_tennis_ranking.git
+sudo git remote add origin https://github.com/enioozaki/prj4_tennis_ranking_srv.git
 sudo git pull origin master
 ```
 
@@ -212,7 +212,7 @@ sudo git pull origin master
 
 `sudo mv application.py __init__.py`
 - Edit __init__.py and database_setup.py and change **engine = create_engine('sqlite:///clubs.db?check_same_thread=False')** or **engine = create_engine('sqlite:///clubs.db?check_same_thread=False')** to 
-`engine = create_engine('postgresql://grader:postgres_password@localhost/clubs')`, using:
+`engine = create_engine('postgresql://grader:grader@localhost/clubs')`, using:
 
 ```
 sudo nano __init__.py
@@ -271,9 +271,9 @@ sudo nano /etc/apache2/sites-available/tennis_ranking.conf
 - Add the lines of code below to the file `tennis_ranking.conf`to configure the virtual host.
 ```
 <VirtualHost *:80>
-	ServerName 3.222.113.14
+	ServerName 3.221.170.134
 	ServerAdmin enioozaki@uol.com.br
-	ServerAlias 3.222.113.14.xip.io
+	ServerAlias 3.221.170.134.xip.io
 	WSGIScriptAlias / /var/www/tennis_ranking/tennis_ranking.wsgi
 	<Directory /var/www/tennis_ranking/>
 		Order allow,deny
@@ -300,8 +300,8 @@ sudo nano /etc/apache2/sites-available/tennis_ranking.conf
 
 ```
 cd /var/www/tennis_ranking
-sudo touch tennis_ranking.wsgi 
-sudo nano tennis_ranking.wsgi 
+sudo touch tennis_ranking.wsgi
+sudo nano tennis_ranking.wsgi
 ```
 
 - Add the lines of code below to the file `tennis_ranking.wsgi`
@@ -327,7 +327,7 @@ application.secret_key = 'super_secret_key'
 ### Execute
 - Access the app 
 
-`3.222.113.14.xip.io`
+`3.221.170.134.xip.io`
 
 ### Log
 - If any error comes up, you can get more information about this error in the server error log:
@@ -347,23 +347,4 @@ Git Repos from
 @mguidoti
 @leandrocl2005
 @lucianobarauna
-
--------------
-to be included in instructions to reviewers
-
-engine = create_engine('postgresql://grader:grader@localhost/clubs')
-
-private_key
-
-
---------------
-
-Check if no remote connections are allowed sudo vim /etc/postgresql/9.3/main/pg_hba.conf
-
-
---------------------
-Do not allow remote connections
-Create a new database user named catalog that has limited permissions to your catalog application database.
-
-14. Set it up in your server so that it functions correctly when visiting your server’s IP address in a browser. Make sure that your .git directory is not publicly accessible via a browser!
 
